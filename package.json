@@ -1,0 +1,23 @@
+{
+  "name": "vim-js-alternate",
+  "version": "0.0.1",
+  "description": "Vim plugin for managing 'alternate' files (quickly switching between source and test files)",
+  "main": "lib\\index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/extr0py/vim-js-alternate.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/extr0py/vim-js-alternate/issues"
+  },
+  "homepage": "https://github.com/extr0py/vim-js-alternate",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^2.12.0"
+  }
+}
