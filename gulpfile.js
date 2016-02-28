@@ -17,3 +17,8 @@ gulp.task("build:test", function() {
 
     return tsResult.js.pipe(gulp.dest("test"));
 });
+
+gulp.watch("src\\**\\*.ts", gulp.parallel("build:src"));
+gulp.watch("test\\**\\*.ts", gulp.parallel("build:test"));
+
+gulp.task("build", gulp.series("build:src", "build:test"));

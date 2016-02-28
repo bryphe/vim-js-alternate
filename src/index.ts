@@ -1,1 +1,4 @@
-console.log("Hello world");
+#!/usr/bin/env node
+
+console.log("Hello world!");
+
