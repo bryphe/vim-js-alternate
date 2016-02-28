@@ -14,9 +14,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/extr0py/vim-js-alternate/issues"
-  }, 
+  },
   "bin": {
-      "testApp": "./lib/index.js"
+    "testApp": "./lib/index.js"
   },
   "homepage": "https://github.com/extr0py/vim-js-alternate",
   "devDependencies": {
@@ -24,5 +24,7 @@
     "gulp-cli": "git://github.com/gulpjs/gulp-cli#4.0",
     "gulp-typescript": "^2.12.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "minimatch": "^3.0.0"
+  }
 }
