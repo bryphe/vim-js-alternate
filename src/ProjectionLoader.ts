@@ -1,5 +1,7 @@
+import fs = require("fs");
 import path = require("path");
 
+import IAlternateFileMapping from "./IAlternateFileMapping"
 import IProjection from "./IProjection"
 import IProjectionLoader from "./IProjectionLoader"
 
@@ -22,20 +24,31 @@ export default class ProjectionLoader implements IProjectionLoader {
         if(fs.existsSync(projectionFilePath)) {
             var projectionJson = fs.readFileSync(projectionFilePath, "utf8");
             var projectionPaths = this._parseProjectionJson(projectionJson);
+
+            var projection = {
+                basePath: parentPath,
+                alternates: projectionPaths
+            }
+
+            projections.push(projection);
+        }
+
+        if(!isRoot) {
+            this._loadProjectionsRecursively(parentPath, projections);
         }
     }
 
-    private _parseProjectionJson(projectionJson: string): IAlternatePaths[] {
+    private _parseProjectionJson(projectionJson: string): IAlternateFileMapping[] {
         var projection = JSON.parse(projectionJson);
         var ret = [];
 
         var alternates = projection.alternates;
 
         Object.keys(alternates).forEach((entry) => {
-            var val = projection[entry];
+            var val = alternates[entry];
             ret.push({
-                globPatternToMatch: entry,
-                alternatePattern: val
+                primaryFilePattern: entry,
+                alternateFilePattern: val
             });
         });
 

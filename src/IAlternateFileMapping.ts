@@ -1,5 +1,5 @@
 export interface IAlternateFileMapping {
-    globPatternToMatch: string;
+    primaryFilePattern: string;
     alternatePattern: string;
 }
 

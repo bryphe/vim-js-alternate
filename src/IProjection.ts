@@ -1,8 +1,8 @@
-import IProjectionPath from "./IProjectionPath";
+import IAlternateFileMapping from "./IAlternateFileMapping";
 
 export interface IProjection {
     basePath: string;
-    alternatePaths: IAlternateFileMapping[];
+    alternates: IAlternateFileMapping[];
 }
 
 export default IProjection;
