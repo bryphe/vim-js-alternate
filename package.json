@@ -22,11 +22,14 @@
   "devDependencies": {
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
     "gulp-cli": "git://github.com/gulpjs/gulp-cli#4.0",
+    "gulp-mocha": "^2.2.0",
+    "gulp-spawn-mocha": "^2.2.2",
     "gulp-typescript": "^2.12.0",
     "merge2": "^1.0.1",
     "mock-fs": "^3.7.0"
   },
   "dependencies": {
+    "glob": "^7.0.3",
     "minimatch": "^3.0.0"
   }
 }

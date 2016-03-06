@@ -1,6 +1,6 @@
 export interface IAlternateFileMapping {
     primaryFilePattern: string;
-    alternatePattern: string;
+    alternateFilePattern: string;
 }
 
 export default IAlternateFileMapping;

@@ -1,5 +1,6 @@
 import minimatch = require("minimatch");
 import path = require("path");
+import glob = require("glob");
 
 import IProjectionLoader from "./IProjectionLoader";
 import IProjectionResolver from "./IProjectionResolver";
@@ -12,7 +13,7 @@ export class ProjectionResolver implements IProjectionResolver {
         this._projectionLoader = projectionLoader;
     }
 
-    public resolveProjection(file: string): string {
+    public getAlternate(file: string): string {
         var workingDirectory = path.dirname(file);
 
         var projections = this._projectionLoader.getProjections(workingDirectory);
@@ -27,10 +28,29 @@ export class ProjectionResolver implements IProjectionResolver {
                 var globPath = path.join(basePath, "/**/", alternates[j].primaryFilePattern);
 
                 if(minimatch(file, globPath)) {
-                    console.log("FOUND HIT");
+                    // Try and finding matching string
+
+
+                    var alternate = this._findAlternate(file, path.join(basePath, "/**/", alternates[j].alternateFilePattern));
+                    if(alternate)
+                        return alternate;
                 }
             }
         }
+
+        return null;
+    }
+
+    private _findAlternate(filePath, alternateGlobPath: string): string {
+        // Replace '{}' with the filename
+        var fileNameWithoutExtension = path.basename(filePath, path.extname(filePath));
+
+        alternateGlobPath = alternateGlobPath.replace("{}", fileNameWithoutExtension);
+
+        var matches = glob.sync(alternateGlobPath);
+
+        if(matches.length > 0)
+            return matches[0];
 
         return null;
     }
