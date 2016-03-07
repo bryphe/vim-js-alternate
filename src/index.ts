@@ -1,12 +1,8 @@
-#!/usr/bin/env node
-
+declare var vim;
 console.log("vim-js-alternate: initialized");
 
 import ProjectionLoader from "./ProjectionLoader";
 import { ProjectionResolver } from "./ProjectionResolver";
-
-var Vim = require("vim-node-driver");
-var vim = new Vim();
 
 var projectionLoader = new ProjectionLoader();
 var projectionResolver = new ProjectionResolver(projectionLoader);
