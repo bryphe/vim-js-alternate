@@ -25,13 +25,14 @@ export class ProjectionResolver implements IProjectionResolver {
             var alternates = projection.alternates;
 
             for(var j = 0; j < alternates.length; j++) {
-                var globPath = path.join(basePath, "/**/", alternates[j].primaryFilePattern);
+                var globPath = this._getGlobPath(basePath, alternates[j].primaryFilePattern);
 
+                console.log(globPath);
                 if(minimatch(file, globPath)) {
                     // Try and finding matching string
 
 
-                    var alternate = this._findAlternate(file, path.join(basePath, "/**/", alternates[j].alternateFilePattern));
+                    var alternate = this._findAlternate(file, this._getGlobPath(basePath, alternates[j].alternateFilePattern));
                     if(alternate)
                         return alternate;
                 }
@@ -39,6 +40,15 @@ export class ProjectionResolver implements IProjectionResolver {
         }
 
         return null;
+    }
+
+    private _getGlobPath(basePath: string, filePattern: string): string {
+        if(filePattern.indexOf("{workspaceRoot}") >= 0) {
+            filePattern = filePattern.replace("{workspaceRoot}", basePath);
+            return path.normalize(filePattern);
+        } else {
+            return path.join(basePath, "/**/", filePattern);
+        }
     }
 
     private _findAlternate(filePath, alternateGlobPath: string): string {

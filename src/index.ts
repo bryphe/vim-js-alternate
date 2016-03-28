@@ -1,5 +1,7 @@
 declare var vim;
-console.log("vim-js-alternate: initialized");
+declare var log; 
+
+log.verbose("vim-js-alternate: initialized");
 
 import ProjectionLoader from "./ProjectionLoader";
 import { ProjectionResolver } from "./ProjectionResolver";
@@ -10,13 +12,14 @@ var projectionResolver = new ProjectionResolver(projectionLoader);
 var currentBuffer;
 var currentAlternateFile = null;
 
+
 var alternateCache = {};
 
 vim.on("BufEnter", (args) => {
     currentBuffer = args.currentBuffer;
     if(currentBuffer) {
         currentAlternateFile = projectionResolver.getAlternate(currentBuffer);
-        console.log("Resolving projection for: " + currentBuffer + " | " + projectionResolver.getAlternate(currentBuffer));
+        log.verbose("Resolving projection for: " + currentBuffer + " | " + projectionResolver.getAlternate(currentBuffer));
     }
 });
 
@@ -36,4 +39,4 @@ vim.addCommand("Alternate", () => {
 
 });
 
-console.log("command registered")
+log.verbose("command registered")

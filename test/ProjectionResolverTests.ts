@@ -66,4 +66,23 @@ describe("ProjectionResolveTests", () => {
         var alternateFile = projectionResolver.getAlternate("rootPath/sub1-1/test.tst");
         assert.strictEqual(alternateFile, "rootPath/sub1-2/test.tst");
     });
+
+    it("Test resolution based on workspace root", () => {
+        var projection = {
+            alternates: {
+                "{workspaceRoot}/rootPath/sub1-1/*.tst":"{workspaceRoot}/rootPath/sub1-2/{}.tst"
+            }
+        };
+
+        fs.writeFileSync("project.json", JSON.stringify(projection), "utf8");
+
+        fs.writeFileSync("rootPath/sub1-1/test.tst", "");
+        fs.writeFileSync("rootPath/sub1-2/test.tst", "");
+
+        var projectionLoader = new ProjectionLoader();
+        var projectionResolver = new ProjectionResolver(projectionLoader);
+
+        var alternateFile = projectionResolver.getAlternate("rootPath/sub1-1/test.tst");
+        assert.strictEqual(alternateFile, "rootPath/sub1-2/test.tst");
+    });
  });
