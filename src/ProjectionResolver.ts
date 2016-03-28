@@ -27,7 +27,6 @@ export class ProjectionResolver implements IProjectionResolver {
             for(var j = 0; j < alternates.length; j++) {
                 var globPath = this._getGlobPath(basePath, alternates[j].primaryFilePattern);
 
-                console.log(globPath);
                 if(minimatch(file, globPath)) {
                     // Try and finding matching string
 

@@ -39,4 +39,8 @@ vim.addCommand("Alternate", () => {
 
 });
 
+vim.addCommand("AlternateProcessId", () => {
+    vim.echo(process.pid);
+});
+
 log.verbose("command registered")
