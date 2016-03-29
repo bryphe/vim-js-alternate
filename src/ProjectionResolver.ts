@@ -57,6 +57,7 @@ export class ProjectionResolver implements IProjectionResolver {
         }
     }
 
+    // TODO: Replace this to just concatenate the relative path that was resolved
     private _getGlobPathForAlternate(basePath: string, filePattern: string): string {
         if(filePattern.indexOf("{workspaceRoot}") >= 0) {
             filePattern = filePattern.replace("{workspaceRoot}", basePath);
