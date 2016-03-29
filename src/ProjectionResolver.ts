@@ -18,6 +18,9 @@ export class ProjectionResolver implements IProjectionResolver {
 
         var projections = this._projectionLoader.getProjections(workingDirectory);
 
+        // TODO:
+        // var basePath = File.getRootDrive(workingDirectory);
+
         for(var i = 0; i < projections.length; i++) { 
             var projection = projections[i];
             
