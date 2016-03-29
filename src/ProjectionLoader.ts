@@ -26,7 +26,6 @@ export default class ProjectionLoader implements IProjectionLoader {
             var projectionPaths = this._parseProjectionJson(projectionJson);
 
             var projection = {
-                basePath: parentPath,
                 alternates: projectionPaths
             }
 

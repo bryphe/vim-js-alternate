@@ -37,7 +37,7 @@ describe("ProjectionLoaderTests", () => {
         var projections = projectionLoader.getProjections("rootPath/sub1/sub2");
 
         assert.strictEqual(1, projections.length);
-        assert.deepEqual({basePath: ".", alternates: [
+        assert.deepEqual({alternates: [
             {
                 primaryFilePattern: "src/**/*.js",
                 alternateFilePattern: "test/**/{}.js"

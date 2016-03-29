@@ -21,17 +21,24 @@ export class ProjectionResolver implements IProjectionResolver {
         for(var i = 0; i < projections.length; i++) { 
             var projection = projections[i];
             
-            var basePath = projection.basePath;
             var alternates = projection.alternates;
+            // TODO: Get rid of this
+            var basePath = ".";
 
             for(var j = 0; j < alternates.length; j++) {
-                var globPath = this._getGlobPath(basePath, alternates[j].primaryFilePattern);
+                var globPath = this._getGlobPathForPrimary(basePath, alternates[j].primaryFilePattern);
 
                 if(minimatch(file, globPath)) {
-                    // Try and finding matching string
+                    // Try and find matching string
+                    var fullFilePath = path.resolve(file);
+                    
+                    // TODO: Get relative path from the matched path, and the globPath
+                    // var relativeBase = getRelativePath(fullFilePath, alternates[j].primaryFilePattern);
+                    // Do path.parse on both paths:
+                    // -take all the ones on the left, until it matches something on the right
+                    // -use that as the delta
 
-
-                    var alternate = this._findAlternate(file, this._getGlobPath(basePath, alternates[j].alternateFilePattern));
+                    var alternate = this._findAlternate(file, this._getGlobPathForAlternate(basePath, alternates[j].alternateFilePattern));
                     if(alternate)
                         return alternate;
                 }
@@ -41,7 +48,16 @@ export class ProjectionResolver implements IProjectionResolver {
         return null;
     }
 
-    private _getGlobPath(basePath: string, filePattern: string): string {
+    private _getGlobPathForPrimary(basePath: string, filePattern: string): string {
+        if(filePattern.indexOf("{workspaceRoot}") >= 0) {
+            filePattern = filePattern.replace("{workspaceRoot}", basePath);
+            return path.normalize(filePattern);
+        } else {
+            return path.join(basePath, "/**/", filePattern);
+        }
+    }
+
+    private _getGlobPathForAlternate(basePath: string, filePattern: string): string {
         if(filePattern.indexOf("{workspaceRoot}") >= 0) {
             filePattern = filePattern.replace("{workspaceRoot}", basePath);
             return path.normalize(filePattern);
