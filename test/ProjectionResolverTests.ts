@@ -1,28 +1,24 @@
 import assert = require("assert");
-import fs = require("fs");
+import fs = require("fs-extra");
+import os = require("os");
 import path = require("path");
 import mockFs = require("mock-fs");
 
 import ProjectionLoader from "../lib/ProjectionLoader"
 import { ProjectionResolver } from "../lib/ProjectionResolver"
 
-describe("ProjectionResolveTests", () => {
+describe("ProjectionResolverTests", () => {
+    var testPath: string;
 
     beforeEach(() => {
-        mockFs({
-            "rootPath": {
-                "sub1-1": {
-                    "sub2-1": {}
-                },
-                "sub1-2": {
-                    "sub2-2": {}
-                }
-            }
-        });
+        testPath = path.join(os.tmpdir(), "testFolder");
+        if(fs.existsSync(testPath))
+            fs.removeSync(testPath);
+        fs.mkdirSync(testPath);
     });
 
     afterEach(() => {
-        mockFs.restore();
+        fs.removeSync(testPath);
     });
 
 
@@ -35,17 +31,17 @@ describe("ProjectionResolveTests", () => {
             }
         };
 
-        fs.writeFileSync("project.json", JSON.stringify(projection), "utf8");
+        writeFile("project.json", JSON.stringify(projection));
 
         // Write a test file
-        fs.writeFileSync("test.ex1", "");
-        fs.writeFileSync("test.ex2", "");
+        writeFile("test.ex1", "");
+        writeFile("test.ex2", "");
 
         var projectionLoader = new ProjectionLoader();
         var projectionResolver = new ProjectionResolver(projectionLoader);
 
-        var alternateFile = projectionResolver.getAlternate("test.ex1");
-        assert.strictEqual(alternateFile, "test.ex2");
+        var alternateFile = projectionResolver.getAlternate(path.join(testPath, "test.ex1"));
+        assert.strictEqual(path.normalize(alternateFile), path.normalize(path.join(testPath, "test.ex2")));
     });
 
     it("Test resolving a projection in a subdirectory", () => {
@@ -55,34 +51,21 @@ describe("ProjectionResolveTests", () => {
             }
         };
 
-        fs.writeFileSync("project.json", JSON.stringify(projection), "utf8");
+        writeFile("project.json", JSON.stringify(projection));
 
-        fs.writeFileSync("rootPath/sub1-1/test.tst", "");
-        fs.writeFileSync("rootPath/sub1-2/test.tst", "");
-
-        var projectionLoader = new ProjectionLoader();
-        var projectionResolver = new ProjectionResolver(projectionLoader);
-
-        var alternateFile = projectionResolver.getAlternate("rootPath/sub1-1/test.tst");
-        assert.strictEqual(alternateFile, "rootPath/sub1-2/test.tst");
-    });
-
-    it("Test resolution based on workspace root", () => {
-        var projection = {
-            alternates: {
-                "{workspaceRoot}/rootPath/sub1-1/*.tst":"{workspaceRoot}/rootPath/sub1-2/{}.tst"
-            }
-        };
-
-        fs.writeFileSync("project.json", JSON.stringify(projection), "utf8");
-
-        fs.writeFileSync("rootPath/sub1-1/test.tst", "");
-        fs.writeFileSync("rootPath/sub1-2/test.tst", "");
+        writeFile("rootPath/sub1-1/test.tst", "");
+        writeFile("rootPath/sub1-2/test.tst", "");
 
         var projectionLoader = new ProjectionLoader();
         var projectionResolver = new ProjectionResolver(projectionLoader);
 
-        var alternateFile = projectionResolver.getAlternate("rootPath/sub1-1/test.tst");
-        assert.strictEqual(alternateFile, "rootPath/sub1-2/test.tst");
+        var alternateFile = projectionResolver.getAlternate(path.join(testPath, "rootPath/sub1-1/test.tst"));
+        assert.strictEqual(path.normalize(alternateFile), path.normalize(path.join(testPath, "rootPath/sub1-2/test.tst")));
     });
+
+     function writeFile(fullPath: string, contents?: string) {
+         contents = contents || "";
+         fs.outputFileSync(path.join(testPath, fullPath), contents);
+     }
  });
+

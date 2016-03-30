@@ -29,6 +29,7 @@
     "mock-fs": "^3.7.0"
   },
   "dependencies": {
+    "fs-extra": "^0.26.7",
     "glob": "^7.0.3",
     "minimatch": "^3.0.0"
   }
