@@ -19,7 +19,7 @@ vim.on("BufEnter", (args) => {
     currentBuffer = args.currentBuffer;
     if(currentBuffer) {
         currentAlternateFile = projectionResolver.getAlternate(currentBuffer);
-        log.verbose("Resolving projection for: " + currentBuffer + " | " + projectionResolver.getAlternate(currentBuffer));
+        log.info("Resolving projection for: " + currentBuffer + " | " + projectionResolver.getAlternate(currentBuffer));
     }
 });
 
