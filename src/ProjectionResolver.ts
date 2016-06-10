@@ -65,4 +65,3 @@ export class ProjectionResolver implements IProjectionResolver {
         return null;
     }
 }
-document.body.accessKey
